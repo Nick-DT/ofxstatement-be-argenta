@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/themalkolm/ofxstatement-seb.svg?branch=master
     :target: https://travis-ci.org/themalkolm/ofxstatement-seb
 
+ofxstatement-seb
+================
+
 This is a collection of parsers for proprietary statement formats, produced by
 `SEB`_. It parses ``Export.xlsx`` file exported from internet bank.
 
