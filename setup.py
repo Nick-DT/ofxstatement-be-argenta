@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+from setuptools import find_packages
 from distutils.core import setup
 
-version = '1.0.0'
+version = '0.0.1'
 with open('README.rst', encoding = "utf-8") as f:
     long_description = f.read()
 
-setup(name='ofxstatement-seb',
+setup(name='ofxstatement-be-argenta',
       version=version,
-      author='Alexander Krasnukhin',
-      author_email='the.malkolm@gmail.com',
-      url='https://github.com/themalkolm/ofxstatement-seb',
-      description=('ofxstatement plugins for SEB'),
+      author='Wout Br',
+      author_email='35967233+woutbr@users.noreply.github.com ',
+      url='https://github.com/woutbr/ofxstatement-be-argenta',
+      description=('ofxstatement plugin for Argenta'),
       long_description=long_description,
       license='MIT',
-      keywords=['ofx', 'ofxstatement', 'seb'],
+      keywords=['ofx', 'ofxstatement', 'argenta'],
       classifiers=[
           'Development Status :: 3 - Alpha',
           'Programming Language :: Python :: 3',
@@ -28,9 +28,9 @@ setup(name='ofxstatement-seb',
       packages=['ofxstatement', 'ofxstatement.plugins'],
       namespace_packages=['ofxstatement', 'ofxstatement.plugins'],
       entry_points={
-          'ofxstatement': ['seb = ofxstatement.plugins.seb:SebPlugin']
+          'ofxstatement': ['argenta = ofxstatement.plugins.argenta:ArgentaPlugin']
       },
-      install_requires=['ofxstatement'],
+      install_requires=['ofxstatement', 'openpyxl'],
       test_suite='ofxstatement.plugins.tests',
       include_package_data=True,
       zip_safe=True

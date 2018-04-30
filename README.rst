@@ -1,47 +1,17 @@
-.. image:: https://travis-ci.org/themalkolm/ofxstatement-seb.svg?branch=master
-    :target: https://travis-ci.org/themalkolm/ofxstatement-seb
+ofxstatement-be-argenta
+=======================
 
-ofxstatement-seb
-================
+This is a plugin for the tool `ofxstatement`_. It parses the ``downloadTransactionHistoryXLS.xlsx`` file exported from the Belgian bank Argenta and writes is as an OFX file.
 
-This is a collection of parsers for proprietary statement formats, produced by
-`SEB`_. It parses ``Export.xlsx`` file exported from internet bank.
-
-It is a plugin for `ofxstatement`_.
-
-.. _SEB: http://seb.se
 .. _ofxstatement: https://github.com/kedder/ofxstatement
 
-Configuration
-=============
+Usage
+=====
 
-There is only one configuration option ``brief``. Turn it on if you want to parse description
-and replace it with the actual card description while stripping off any know additional
-data e.g:
+  $ ofxstatement convert -t argenta downloadTransactionHistoryXLS.xlsx output.ofx
 
-``WIRSTRÖMS PU/14-12-31`` -> ``WIRSTRÖMS PU``
-
-Why? This way similar transactions will have similar descriptions and it will allow you to
-group transactions using simple text grouping. Otherwise date suffixes will prevent this and
-make every transaction description unique.
-
-Locale
+Credit
 ======
 
-You can configure exact locale to use during parsing. Here is example how to configure it
-shown as default configuration you always have.
-
-.. code-block::
-
-    [default]
-    plugin = seb
-    locale = sv_SE
-
-Example
-=======
-
-.. code-block::
-
-    [seb]
-    plugin = seb
-    brief = 1
+Credit to [kedder](https://github.com/kedder) for writing ofxstatement. 
+And credit to [themalkolm](https://github.com/themalkolm) for writing the plugin [ofxstatement-seb](https://github.com/themalkolm/ofxstatement-seb) for parsing xlsx. I forked this project from it.
