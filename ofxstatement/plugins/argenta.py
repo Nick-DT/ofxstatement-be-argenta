@@ -6,6 +6,7 @@ import logging
 
 from datetime import datetime
 from openpyxl import load_workbook
+from io import BytesIO
 
 from ofxstatement.parser import StatementParser
 from ofxstatement.plugin import Plugin
@@ -34,13 +35,23 @@ class ArgentaStatementParser(StatementParser):
         
         self.col_index = dict(zip(self.header, range(0, 11)))
 
-        self.sheet = load_workbook(filename=fin, read_only=True).active
+        with open(fin, "rb") as f:
+            in_mem_file = BytesIO(f.read())
+        
+        self.workbook = load_workbook(filename=in_mem_file, read_only=True)
+        self.sheet = self.workbook.active
         # dimensions are incorrectly set in the XLSX-file
         self.sheet.max_row = self.sheet.max_column = None
         
         self.validate()
 
         self.statement = self.parse_statement()
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.workbook.close()
 
     def validate(self):
         """

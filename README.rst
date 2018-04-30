@@ -11,7 +11,7 @@ Usage
 Credit
 ======
 
-Credit to `kedder`_ for writing ofxstatement. 
+Credit to `kedder`_ for writing ofxstatement.  
 And credit to `themalkolm`_ for writing the plugin `ofxstatement-seb`_ for parsing xlsx. I forked this project from it.
 
 .. _ofxstatement: https://github.com/kedder/ofxstatement
