@@ -12,10 +12,6 @@ from ofxstatement.parser import StatementParser
 from ofxstatement.plugin import Plugin
 from ofxstatement.statement import Statement, StatementLine, BankAccount
 
-def take(n, iterable):
-    """Return first n items of the iterable as a list."""
-    return list(itertools.islice(iterable, n))
-
 class ArgentaStatementParser(StatementParser):
     header = ['Rekening', 'Boekdatum', 'Valutadatum', 'Referentie',
     'Beschrijving', 'Bedrag', 'Munt', 'Verrichtingsdatum',
@@ -79,7 +75,7 @@ class ArgentaStatementParser(StatementParser):
         """
         
         logging.info('Verifying that the sheet has at least 2 rows.')
-        top_two_rows = take(2, self.sheet.iter_rows())
+        top_two_rows = list(itertools.islice(self.sheet.iter_rows(), 2))
         assert len(top_two_rows) == 2
 
         logging.info('Verifying that the first row has 11 cells.')

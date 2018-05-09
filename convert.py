@@ -19,6 +19,7 @@ def convert(path, debug):
 
     with argenta.ArgentaPlugin(ui=None, settings=None).get_parser(path) as parser:
         statement = parser.parse()
+        logging.info('Statement has been parsed.')
 
     if debug:
         for line in statement.lines:
@@ -34,9 +35,11 @@ def convert(path, debug):
     with open(output_file, 'w') as out:
         writer = OfxWriter(statement)
         out.write(writer.toxml())
+        logging.info('Statement has been written to ' + output_file)
         
     path_new = base_filename + ext
     os.rename(path, path_new)
+    logging.info('Original file has been renamed to ' + path_new)
 
 if __name__ == '__main__':
     convert()
