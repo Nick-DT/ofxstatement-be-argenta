@@ -22,8 +22,10 @@ class ArgentaStatementParser(StatementParser):
         'Betaling Bancontact': 'POS',
         'Betaling Maestro': 'POS',
         'Bestendige opdracht': 'REPEATPMT',
-        'SEPA-domiciliëring': 'DIRECTDEBIT'
+        'SEPA-domiciliëring': 'DIRECTDEBIT',
+        'Debet ten voordele van BCC': 'DEBIT'
     }# TODO Add more transaction types as I encounter them.
+    # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
 
     def __init__(self, fin):
         """Create a new ArgentaStatementParser instance.
@@ -88,7 +90,8 @@ class ArgentaStatementParser(StatementParser):
         logging.info('Verifying account numbers are IBAN Belgian formatted (A2 and I2).')
         first_stmt_row = [c.value for c in top_two_rows[1]]
         assert BankAccountIban.is_valid(first_stmt_row[self.col_index['Rekening']])
-        assert BankAccountIban.is_valid(first_stmt_row[self.col_index['Rekening tegenpartij']])
+        if first_stmt_row[self.col_index['Rekening tegenpartij']]:
+            assert BankAccountIban.is_valid(first_stmt_row[self.col_index['Rekening tegenpartij']])
         
         logging.info('Verifying statement date is a date (H2).')
         assert isinstance(first_stmt_row[self.col_index['Verrichtingsdatum']], datetime)
@@ -137,7 +140,7 @@ class ArgentaStatementParser(StatementParser):
         stmt_line.payee = row[self.col_index['Naam tegenpartij']]
         stmt_line.refnum = row[self.col_index['Referentie']]
         
-        stmt_line.trntype = self.dict_transaction_types[row[self.col_index['Beschrijving']]] or 'OTHER'
+        stmt_line.trntype = self.dict_transaction_types.get(row[self.col_index['Beschrijving']], 'OTHER')
         if stmt_line.trntype == 'OTHER':
             logging.info('Other transaction type found: '+row[self.col_index['Beschrijving']])
         
