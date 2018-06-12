@@ -23,7 +23,8 @@ class ArgentaStatementParser(StatementParser):
         'Betaling Maestro': 'POS',
         'Bestendige opdracht': 'REPEATPMT',
         'SEPA-domiciliëring': 'DIRECTDEBIT',
-        'Debet ten voordele van BCC': 'DEBIT'
+        'Debet ten voordele van BCC': 'DEBIT',
+        'Storting kaarttransactie': 'XFER'
     }# TODO Add more transaction types as I encounter them.
     # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
 
