@@ -24,7 +24,8 @@ class ArgentaStatementParser(StatementParser):
         'Bestendige opdracht': 'REPEATPMT',
         'SEPA-domiciliëring': 'DIRECTDEBIT',
         'Debet ten voordele van BCC': 'DEBIT',
-        'Storting kaarttransactie': 'XFER'
+        'Storting kaarttransactie': 'XFER',
+        'Opname Bancontact': 'ATM'
     }# TODO Add more transaction types as I encounter them.
     # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
 
