@@ -13,15 +13,17 @@ from ofxstatement.plugins import argenta
 @click.argument('path')
 @click.option('--debug', is_flag=True, default=False)
 def convert(path, debug):
-    """Parse and write transactions from Argenta downloadTransactionHistoryXLS.xlsx file."""
+    """Parse and write transactions from Argenta_iban_date.xlsx file."""
 
-    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+    level = logging.DEBUG if debug else logging.INFO
+    logging.basicConfig(level=level, format='[%(levelname)s] %(message)s')
 
     with argenta.ArgentaPlugin(ui=None, settings=None).get_parser(path) as parser:
         statement = parser.parse()
-        logging.info('Statement has been parsed.')
+        logging.debug('Statement has been parsed.')
 
     if debug:
+        logging.debug('Statement.lines:')
         for line in statement.lines:
             print(line)
         return

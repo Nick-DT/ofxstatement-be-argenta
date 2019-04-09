@@ -79,27 +79,27 @@ class ArgentaStatementParser(StatementParser):
          BE68 5390 0754 7034, Adams White, Comment of transaction]
         """
         
-        logging.info('Verifying that the sheet has at least 2 rows.')
+        logging.debug('Verifying that the sheet has at least 2 rows.')
         top_two_rows = list(itertools.islice(self.sheet.iter_rows(), 2))
         assert len(top_two_rows) == 2
 
-        logging.info('Verifying that the first row has 11 cells.')
+        logging.debug('Verifying that the first row has 11 cells.')
         assert len(top_two_rows[1]) == 11
 
-        logging.info('Verifying statements header.')
+        logging.debug('Verifying statements header.')
         statement_header_row = [c.value for c in top_two_rows[0]]
         assert self.header == statement_header_row
 
-        logging.info('Verifying account numbers are IBAN Belgian formatted (A2 and I2).')
+        logging.debug('Verifying account numbers are IBAN Belgian formatted (A2 and I2).')
         first_stmt_row = [c.value for c in top_two_rows[1]]
         assert BankAccountIban.is_valid(first_stmt_row[self.col_index['Rekening']])
         if first_stmt_row[self.col_index['Rekening tegenpartij']]:
             assert BankAccountIban.is_valid(first_stmt_row[self.col_index['Rekening tegenpartij']])
         
-        logging.info('Verifying statement date is a date (H2).')
+        logging.debug('Verifying statement date is a date (H2).')
         assert isinstance(first_stmt_row[self.col_index['Verrichtingsdatum']], datetime)
         
-        logging.info('Verifying account id is equal for every transaction (column A).')
+        logging.debug('Verifying account id is equal for every transaction (column A).')
         BankAccountIbans_are_equal = True
         currencies_are_equal = True
         for row in self.sheet.iter_rows(min_row=3):
@@ -113,10 +113,10 @@ class ArgentaStatementParser(StatementParser):
                 break
         
         assert BankAccountIbans_are_equal
-        logging.info('Verifying currency is equal for every transaction (column G).')
+        logging.debug('Verifying currency is equal for every transaction (column G).')
         assert currencies_are_equal
 
-        logging.info('Everything is OK!')
+        logging.debug('Everything is OK!')
 
     def parse_statement(self):
         statement = Statement()
@@ -145,7 +145,7 @@ class ArgentaStatementParser(StatementParser):
         
         stmt_line.trntype = self.dict_transaction_types.get(row[self.col_index['Beschrijving']], 'OTHER')
         if stmt_line.trntype == 'OTHER':
-            logging.info('Other transaction type found: '+row[self.col_index['Beschrijving']])
+            logging.warning('Other transaction type found: '+row[self.col_index['Beschrijving']])
         
         try:
             stmt_line.bank_account_to = BankAccountIban(row[self.col_index['Rekening tegenpartij']])
