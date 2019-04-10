@@ -42,7 +42,7 @@ class ArgentaStatementParser(StatementParser):
         self.workbook = load_workbook(filename=in_mem_file, read_only=True)
         self.sheet = self.workbook.active
         # dimensions are incorrectly set in the XLSX-file
-        self.sheet.max_row = self.sheet.max_column = None
+        self.sheet.reset_dimensions()
         
         self.validate()
 
