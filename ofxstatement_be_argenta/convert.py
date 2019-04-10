@@ -10,10 +10,11 @@ from ofxstatement.ofx import OfxWriter
 from ofxstatement.plugins import argenta
 
 @click.command()
-@click.argument('path')
-@click.option('--debug', is_flag=True, default=False)
+@click.argument('path', type=click.Path(exists=True, readable=True))
+@click.option('--debug', is_flag=True, default=False, 
+    help='Log assertions and statement lines. No file is written.')
 def convert(path, debug):
-    """Parse and write transactions from Argenta_iban_date.xlsx file."""
+    """Parse and write transactions from Argenta_iban_date.xlsx file. The given file is renamed."""
 
     level = logging.DEBUG if debug else logging.INFO
     logging.basicConfig(level=level, format='[%(levelname)s] %(message)s')

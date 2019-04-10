@@ -3,7 +3,7 @@
 from setuptools import find_packages
 from distutils.core import setup
 
-version = '1.0.0'
+version = '1.0.1'
 with open('README.rst', encoding = "utf-8") as f:
     long_description = f.read()
 
@@ -30,9 +30,14 @@ setup(name='ofxstatement-be-argenta',
       packages=find_packages(),
       namespace_packages=['ofxstatement', 'ofxstatement.plugins'],
       entry_points={
-          'ofxstatement': ['argenta = ofxstatement.plugins.argenta:ArgentaPlugin']
+          'ofxstatement': ['argenta = ofxstatement.plugins.argenta:ArgentaPlugin'],
+          'console_scripts': ['ofx-argenta-convert = ofxstatement_be_argenta.convert:convert']
       },
-      install_requires=['ofxstatement', 'openpyxl'],
+      install_requires=[
+          'ofxstatement>=0.6.1',
+          'openpyxl>=2.6.2',
+          'click>=6.7'
+      ],
       test_suite='ofxstatement.plugins.tests',
       include_package_data=True,
       zip_safe=True

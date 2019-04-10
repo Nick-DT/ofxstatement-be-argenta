@@ -17,7 +17,7 @@ You can install this plugin and ofxstatement by running:
 Usage
 =====
 
-With ofxstatement:
+With ``ofxstatement``:
 
   $ ofxstatement convert -t argenta Argenta_iban_date.xlsx output.ofx
 
@@ -54,13 +54,13 @@ With ofxstatement:
      -t TYPE, --type TYPE  input file type. This is a section in config file, or
                            plugin name if you have no config file.
 
-With .\\convert.py
+With ``ofx-argenta-convert``:
 
 .. code-block::
 
-    $ py .\convert.py Argenta_iban_date.xlsx
-    [INFO] Statement has been written to .\Argenta_iban_today.ofx
-    [INFO] Original file has been renamed to .\Argenta_iban_today.xlsx
+    $ py ofx-argenta-convert Argenta_iban_date.xlsx
+    [INFO] Statement has been written to .\iban-today.ofx
+    [INFO] Original file has been renamed to .\iban-today.xlsx
 
 Acknowledgments
 ===============
