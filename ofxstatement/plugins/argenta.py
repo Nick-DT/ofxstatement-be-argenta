@@ -22,11 +22,12 @@ class ArgentaStatementParser(StatementParser):
         'Betaling Bancontact': 'POS',
         'Betaling Maestro': 'POS',
         'Bestendige opdracht': 'REPEATPMT',
-        'SEPA-domiciliëring': 'DIRECTDEBIT',
+        'SEPA-domiciliëring': 'REPEATPMT',
         'Debet ten voordele van BCC': 'DEBIT',
         'Storting kaarttransactie': 'XFER',
         'Opname Bancontact': 'ATM',
         'Interestberekening': 'INT'
+        'Uitgaande instantoverschrijving': 'DEBIT',
     }# TODO Add more transaction types as I encounter them.
     # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
 
