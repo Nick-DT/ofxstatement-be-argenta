@@ -26,8 +26,8 @@ class ArgentaStatementParser(StatementParser):
         'Debet ten voordele van BCC': 'DEBIT',
         'Storting kaarttransactie': 'XFER',
         'Opname Bancontact': 'ATM',
-        'Interestberekening': 'INT'
-        'Uitgaande instantoverschrijving': 'DEBIT',
+        'Interestberekening': 'INT',
+        'Uitgaande instantoverschrijving': 'DEBIT'
     }# TODO Add more transaction types as I encounter them.
     # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
 
