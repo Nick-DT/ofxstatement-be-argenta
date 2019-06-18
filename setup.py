@@ -3,7 +3,7 @@
 from setuptools import find_packages
 from distutils.core import setup
 
-version = '1.0.3'
+version = '1.0.4'
 with open('README.rst', encoding = "utf-8") as f:
     long_description = f.read()
 
