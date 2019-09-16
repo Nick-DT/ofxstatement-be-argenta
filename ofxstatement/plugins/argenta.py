@@ -19,16 +19,16 @@ class ArgentaStatementParser(StatementParser):
     dict_transaction_types = {
         'Inkomende overschrijving': 'CREDIT',
         'Uitgaande overschrijving': 'DEBIT',
+        'Uitgaande instantoverschrijving': 'DEBIT',
+        'Debet ten voordele van BCC': 'DEBIT',
         'Betaling Bancontact': 'POS',
         'Betaling Maestro': 'POS',
         'Bestendige opdracht': 'REPEATPMT',
         'SEPA-domiciliëring': 'REPEATPMT',
-        'Debet ten voordele van BCC': 'DEBIT',
+        'Doorlopende betalingsopdracht': 'REPEATPMT',
         'Storting kaarttransactie': 'XFER',
         'Opname Bancontact': 'ATM',
-        'Interestberekening': 'INT',
-        'Uitgaande instantoverschrijving': 'DEBIT',
-        'Doorlopende betalingsopdracht': 'REPEATPMT'
+        'Interestberekening': 'INT'
     }# TODO Add more transaction types as I encounter them.
     # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
 
