@@ -3,16 +3,16 @@
 from setuptools import find_packages
 from distutils.core import setup
 
-version = '1.0.5'
+version = '1.0.6'
 with open('README.rst', encoding = "utf-8") as f:
     long_description = f.read()
 
 setup(name='ofxstatement-be-argenta',
       version=version,
-      author='Wout Breugelmans',
-      author_email='Wout.Breugelmans+ofxstatement@gmail.com',
-      url='https://github.com/woutbr/ofxstatement-be-argenta',
-      description=('ofxstatement plugin for Argenta'),
+      author="Nicolas Dt",
+      author_email="6697462+Nick-DT@users.noreply.github.com",
+      url="https://github.com/Nick-DT/ofxstatement-be-bnp",
+      description=('ofxstatement plugin for Argenta, updated for french version'),
       long_description=long_description,
       long_description_content_type='text/x-rst',
       license='MIT',

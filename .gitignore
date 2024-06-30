@@ -58,3 +58,7 @@ target/
 .idea
 
 .vscode
+
+# Bank data
+*.xlsx
+*.ofx
