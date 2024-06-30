@@ -13,9 +13,13 @@ from ofxstatement.plugin import Plugin
 from ofxstatement.statement import Statement, StatementLine, BankAccount
 
 class ArgentaStatementParser(StatementParser):
-    header = ['Rekening', 'Boekdatum', 'Valutadatum', 'Referentie',
-    'Beschrijving', 'Bedrag', 'Munt', 'Verrichtingsdatum',
-    'Rekening tegenpartij', 'Naam tegenpartij', 'Mededeling']
+    header = [  'Rekening', 'Boekdatum', 'Valutadatum', 'Referentie',
+                'Beschrijving', 'Bedrag', 'Munt', 'Verrichtingsdatum',
+                'Rekening tegenpartij', 'Naam tegenpartij', 'Mededeling']
+    header_fr = ['Compte','Date comptable','Date valeu','Référence',
+                 'Description','Montant','Devise','Date de la transaction',
+                 'Compte de la contrepartie','Nom de la contrepartie','Communication']
+
     dict_transaction_types = {
         'Inkomende overschrijving': 'CREDIT',
         'Uitgaande overschrijving': 'DEBIT',
@@ -29,15 +33,34 @@ class ArgentaStatementParser(StatementParser):
         'Storting kaarttransactie': 'XFER',
         'Opname Bancontact': 'ATM',
         'Opname Maestro': 'ATM',
-        'Interestberekening': 'INT'
+        'Interestberekening': 'INT',
+        'Virement entrant': 'CREDIT',
+        'Virement sortant': 'DEBIT',
+        'Virement instantané entrant': 'CREDIT',
+        'Virement instantané sortant': 'DEBIT',
+        'eCommerce carte de paiement': 'PAYMENT',
+        'Refund banksys': 'CREDIT',
+        'Paiement Bancontact': 'POS',
+        'Paiement Maestro': 'POS',
+        'Domiciliation SEPA': 'REPEATPMT',
+        'Versement transaction de carte': 'XFER',
+        'Retrait Bancontact':   'ATM',
+        'Retrait Maestro':      'ATM',
+        'Taxe Affranchissement Intérêt': 'FEE'      ,
+        'Compte crédit pout fermet. cpte.' : "CREDIT",
+        'Annul. retrait terminal étranger' : "CREDIT",
+        'Achat carburant Bancontact'        : "DEBIT",
+        'Achat de carburant'                : "DEBIT",
+        "Paiement bancontact à l'étranger"  : "DEBIT",
+        'Paiement Belgique'                 : "DEBIT"
     }# TODO Add more transaction types as I encounter them.
     # Transaction types used in <TRNTYPE>: xml.coverpages.org/OFEXFIN2.html#_Ref377532222
-
+    
     def __init__(self, fin):
         """Create a new ArgentaStatementParser instance.
         """
         
-        self.col_index = dict(zip(self.header, range(0, 11)))
+        self.col_index = dict(zip(self.header+self.header_fr, [*range(0, 11),*range(0, 11)]))
 
         with open(fin, "rb") as f:
             in_mem_file = BytesIO(f.read())
@@ -91,7 +114,7 @@ class ArgentaStatementParser(StatementParser):
 
         logging.debug('Verifying statements header.')
         statement_header_row = [c.value for c in top_two_rows[0]]
-        assert self.header == statement_header_row
+        assert (self.header == statement_header_row) | (self.header_fr == statement_header_row)
 
         logging.debug('Verifying account numbers are IBAN Belgian formatted (A2 and I2).')
         first_stmt_row = [c.value for c in top_two_rows[1]]
@@ -124,10 +147,10 @@ class ArgentaStatementParser(StatementParser):
     def parse_statement(self):
         statement = Statement()
         
-        account_holder = BankAccountIban(self.sheet['A2'].value)
-        statement.bank_id = account_holder.bank_id
-        statement.account_id = account_holder.acct_id
-        statement.currency = self.sheet['G2'].value
+        account_holder          = BankAccountIban(self.sheet['A2'].value)
+        statement.bank_id       = account_holder.bank_id
+        statement.account_id    = account_holder.acct_id
+        statement.currency      = self.sheet['G2'].value
         
         return statement
 
@@ -139,12 +162,19 @@ class ArgentaStatementParser(StatementParser):
     def parse_record(self, row):
         stmt_line = StatementLine()
         
-        stmt_line.id = row[self.col_index['Referentie']]
-        stmt_line.date = row[self.col_index['Verrichtingsdatum']]
-        stmt_line.memo = row[self.col_index['Mededeling']]
-        stmt_line.amount = row[self.col_index['Bedrag']]
-        stmt_line.payee = row[self.col_index['Naam tegenpartij']]
-        stmt_line.refnum = row[self.col_index['Referentie']]
+        stmt_line.id        = row[self.col_index['Referentie']]
+        stmt_line.date      = row[self.col_index['Verrichtingsdatum']]
+        stmt_line.memo      = row[self.col_index['Mededeling']]
+        stmt_line.amount    = row[self.col_index['Bedrag']]
+
+        # Now if available add the account nb, and if no payee name use account nb instead
+        stmt_line.payee = row[self.col_index['Rekening tegenpartij']] # Payee defaults to account nb
+        if row[self.col_index['Naam tegenpartij']] :
+            if (not stmt_line.payee or re.search(r"^0+", stmt_line.payee.strip())) : stmt_line.payee = row[self.col_index['Naam tegenpartij']].strip()# but if empty and name isn't, take the name
+            elif stmt_line.payee  : stmt_line.payee = row[self.col_index['Naam tegenpartij']].strip()  +" - "+  stmt_line.payee
+        
+        #stmt_line.payee     = row[self.col_index['Naam tegenpartij']]
+        stmt_line.refnum    = row[self.col_index['Referentie']]
         
         stmt_line.trntype = self.dict_transaction_types.get(row[self.col_index['Beschrijving']], 'OTHER')
         if stmt_line.trntype == 'OTHER':
