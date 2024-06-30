@@ -9,7 +9,7 @@ with open('README.rst', encoding = "utf-8") as f:
 
 setup(name='ofxstatement-be-argenta',
       version=version,
-      author="Nicolas Dt",
+      author="Nicolas Dt, based on version from Wout Breugelmans",
       author_email="6697462+Nick-DT@users.noreply.github.com",
       url="https://github.com/Nick-DT/ofxstatement-be-bnp",
       description=('ofxstatement plugin for Argenta, updated for french version'),
