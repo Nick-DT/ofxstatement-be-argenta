@@ -38,6 +38,7 @@ class ArgentaStatementParser(StatementParser):
         'Virement sortant': 'DEBIT',
         'Virement instantané entrant': 'CREDIT',
         'Virement instantané sortant': 'DEBIT',
+        'Virement (avec prime de fidélité)': 'CREDIT',
         'eCommerce carte de paiement': 'PAYMENT',
         'Refund banksys': 'CREDIT',
         'Paiement Bancontact': 'POS',
@@ -46,7 +47,7 @@ class ArgentaStatementParser(StatementParser):
         'Versement transaction de carte': 'XFER',
         'Retrait Bancontact':   'ATM',
         'Retrait Maestro':      'ATM',
-        'Taxe Affranchissement Intérêt': 'FEE'      ,
+        'Taxe Affranchissement Intérêt': 'INT'      ,
         'Compte crédit pout fermet. cpte.' : "CREDIT",
         'Annul. retrait terminal étranger' : "CREDIT",
         'Achat carburant Bancontact'        : "DEBIT",
@@ -162,9 +163,9 @@ class ArgentaStatementParser(StatementParser):
     def parse_record(self, row):
         stmt_line = StatementLine()
         
-        stmt_line.id        = row[self.col_index['Referentie']]
+        stmt_line.id        = row[self.col_index['Referentie']].strip()
         stmt_line.date      = row[self.col_index['Verrichtingsdatum']]
-        stmt_line.memo      = row[self.col_index['Mededeling']]
+        stmt_line.memo      = row[self.col_index['Mededeling']].strip()
         stmt_line.amount    = row[self.col_index['Bedrag']]
 
         # Now if available add the account nb, and if no payee name use account nb instead
