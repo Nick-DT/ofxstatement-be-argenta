@@ -171,8 +171,10 @@ class ArgentaStatementParser(StatementParser):
         # Now if available add the account nb, and if no payee name use account nb instead
         stmt_line.payee = row[self.col_index['Rekening tegenpartij']] # Payee defaults to account nb
         if row[self.col_index['Naam tegenpartij']] :
-            if (not stmt_line.payee or re.search(r"^0+", stmt_line.payee.strip())) : stmt_line.payee = row[self.col_index['Naam tegenpartij']].strip()# but if empty and name isn't, take the name
-            elif stmt_line.payee  : stmt_line.payee = row[self.col_index['Naam tegenpartij']].strip()  +" - "+  stmt_line.payee
+            # Get rid of multiple spaces/tabs in payee name and assign it to payeetxt
+            payeetxt = re.sub(r'\s+', ' ', row[self.col_index['Naam tegenpartij']].strip())
+            if (not stmt_line.payee or re.search(r"^0+", stmt_line.payee.strip())) : stmt_line.payee = payeetxt# but if empty and name isn't, take the name
+            elif stmt_line.payee  : stmt_line.payee = payeetxt  +" - "+  stmt_line.payee
         
         #stmt_line.payee     = row[self.col_index['Naam tegenpartij']]
         stmt_line.refnum    = row[self.col_index['Referentie']]
